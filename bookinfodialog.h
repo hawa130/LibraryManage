@@ -18,6 +18,8 @@ public:
     ~BookInfoDialog();
 
 private slots:
+    void receiveData(QString data);
+
     void on_returnButton_clicked();
 
     void on_buttonBox_accepted();

@@ -213,15 +213,15 @@ void LibraryMain::on_returnButton_clicked() {
 }
 
 void LibraryMain::on_tableView_clicked(const QModelIndex &index) {
-    int bookID = getSelection(index);
-    updateButton(bookID, loginUserID);
+    if (!ui->bookSwitchButton->isEnabled()) {
+        int bookID = getSelection(index);
+        updateButton(bookID, loginUserID);
+    } else {
+        ui->editButton->setDisabled(false);
+    }
 }
 
 void LibraryMain::updateButton(int bookID, int userID) {
-    if (!ui->userSwitchButton->isEnabled()) {
-        disableButton();
-        return;
-    }
     auto book = lib.findBook(bookID);
     ui->editButton->setDisabled(false);
 
@@ -241,20 +241,23 @@ void LibraryMain::updateButton(int bookID, int userID) {
 void LibraryMain::disableButton() {
     ui->borrowButton->setDisabled(true);
     ui->returnButton->setDisabled(true);
-    ui->editButton->setDisabled(true);
 }
 
 void LibraryMain::on_editButton_clicked() {
-    int bookID = getSelection();
-    BookInfoDialog bookDialog(this, bookID);
-    bookDialog.exec();
-    ui->searchButton->click();
+    if (!ui->bookSwitchButton->isEnabled()) {
+        int bookID = getSelection();
+        BookInfoDialog bookDialog(this, bookID);
+        bookDialog.exec();
+        ui->searchButton->click();
+    }
 }
 
 void LibraryMain::on_addButton_clicked() {
-    BookInfoDialog bookDialog(this);
-    bookDialog.exec();
-    ui->searchButton->click();
+    if (!ui->bookSwitchButton->isEnabled()) {
+        BookInfoDialog bookDialog(this);
+        bookDialog.exec();
+        ui->searchButton->click();
+    }
 }
 
 void LibraryMain::on_tableView_doubleClicked() {

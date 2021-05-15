@@ -1,5 +1,6 @@
 #include "bookinfodialog.h"
 #include "ui_bookinfodialog.h"
+#include "selectdialog.h"
 
 #include <QMessageBox>
 #include <QIntValidator>
@@ -25,6 +26,7 @@ BookInfoDialog::BookInfoDialog(QWidget *parent, int _bookID) :
         ui->borrowButton->setHidden(true);
         ui->returnButton->setHidden(true);
         ui->deleteButton->setHidden(true);
+        ui->buttonBox->setHidden(true);
         ui->nameEdit->setDisabled(true);
         ui->idEdit->setDisabled(true);
         ui->numEdit->setDisabled(true);
@@ -33,6 +35,13 @@ BookInfoDialog::BookInfoDialog(QWidget *parent, int _bookID) :
 
 BookInfoDialog::~BookInfoDialog() {
     delete ui;
+}
+
+
+void BookInfoDialog::receiveData(QString data) {
+    int userID = data.toInt();
+    lib.borrowBook(userID, book->elem.identifier);
+    displayTable();
 }
 
 void BookInfoDialog::initUserTable() {
@@ -70,6 +79,8 @@ void BookInfoDialog::disableButton() {
     ui->returnButton->setDisabled(true);
     if (book->elem.quantity == book->elem.readers.size()) {
         ui->borrowButton->setDisabled(true);
+    } else {
+        ui->borrowButton->setDisabled(false);
     }
 }
 
@@ -173,6 +184,7 @@ bool BookInfoDialog::checkBookInfo() {
 }
 
 void BookInfoDialog::on_borrowButton_clicked() {
-
+    SelectDialog selectDlg(this, book->elem.identifier, -1);
+    connect(&selectDlg, SIGNAL(sendData(QString)), this, SLOT(receiveData(QString)));
+    selectDlg.exec();
 }
-

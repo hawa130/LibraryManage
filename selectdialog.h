@@ -17,10 +17,18 @@ public:
     explicit SelectDialog(QWidget *parent = nullptr, int _bookID = -1, int _userID = -1);
     ~SelectDialog();
 
+signals:
+    void sendData(QString);
+
+private slots:
+    void on_tableView_clicked(const QModelIndex &index);
+
+    void on_buttonBox_accepted();
+
+    void on_tableView_doubleClicked();
+
 private:
     Ui::SelectDialog *ui;
-    Node<BookInfo>* book;
-    Node<UserInfo>* user;
     QStandardItemModel* userModel;
     QStandardItemModel* bookModel;
 
@@ -35,6 +43,10 @@ private:
     void appendSingleBook(Node<BookInfo>*);
 
     void appendSingleUser(Node<UserInfo>*);
+
+    int getSelection();
+
+    int getSelection(const QModelIndex&);
 
 };
 
