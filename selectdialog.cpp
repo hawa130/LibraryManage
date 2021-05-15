@@ -42,9 +42,9 @@ void SelectDialog::initBookTable() {
     ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
     ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
     ui->tableView->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->tableView->setColumnWidth(1, 125);
-    ui->tableView->setColumnWidth(2, 75);
-    ui->tableView->setColumnWidth(3, 75);
+    ui->tableView->setColumnWidth(1, 100);
+    ui->tableView->setColumnWidth(2, 50);
+    ui->tableView->setColumnWidth(3, 50);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableView->setAlternatingRowColors(true);
 }

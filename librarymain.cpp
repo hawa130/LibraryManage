@@ -248,16 +248,23 @@ void LibraryMain::on_editButton_clicked() {
         int bookID = getSelection();
         BookInfoDialog bookDialog(this, bookID);
         bookDialog.exec();
-        ui->searchButton->click();
+    } else {
+        int userID = getSelection();
+        UserInfoDialog userDialog(this, userID);
+        userDialog.exec();
     }
+    ui->searchButton->click();
 }
 
 void LibraryMain::on_addButton_clicked() {
     if (!ui->bookSwitchButton->isEnabled()) {
         BookInfoDialog bookDialog(this);
         bookDialog.exec();
-        ui->searchButton->click();
+    } else {
+        UserInfoDialog userDialog(this);
+        userDialog.exec();
     }
+    ui->searchButton->click();
 }
 
 void LibraryMain::on_tableView_doubleClicked() {

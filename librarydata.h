@@ -290,12 +290,7 @@ public:
     Library(const char *userFile, const char *bookFile) {
         read(userFile, bookFile);
     };
-
-    void printData() {
-        cout << books << endl;
-        cout << users << endl;
-    }
-
+    // 从文件读取数据
     int read(const char *userFile, const char *bookFile) {
         bookPath = bookFile;
         userPath = userFile;

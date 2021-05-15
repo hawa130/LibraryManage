@@ -9,8 +9,11 @@ BookInfoDialog::BookInfoDialog(QWidget *parent, int _bookID) :
     QDialog(parent),
     ui(new Ui::BookInfoDialog) {
     ui->setupUi(this);
+
     userModel = new QStandardItemModel();
+
     ui->idEdit->setValidator(new QIntValidator(0, INT_MAX, this));
+
     book = lib.findBook(_bookID);
     if (book) {
         displayTable();
@@ -37,10 +40,9 @@ BookInfoDialog::~BookInfoDialog() {
     delete ui;
 }
 
-
 void BookInfoDialog::receiveData(QString data) {
-    int userID = data.toInt();
-    lib.borrowBook(userID, book->elem.identifier);
+    auto user = lib.findUser(data.toInt());
+    lib.borrowBook(user, book);
     displayTable();
 }
 
@@ -61,6 +63,7 @@ void BookInfoDialog::initUserTable() {
 
 void BookInfoDialog::displayTable() {
     initUserTable();
+    ui->numLabel->setText(tr("共借出 ") + QString::number(book->elem.readers.size()) + tr(" 本"));
     for (auto p = book->elem.readers.begin(); p != book->elem.readers.end(); p = p->next) {
         appendSingleUser(p->elem);
     }
@@ -124,8 +127,8 @@ int BookInfoDialog::getSelection(const QModelIndex &index) {
 
 void BookInfoDialog::updateBookInfo() {
     string name = ui->nameEdit->text().toStdString();
-    int      id = ui->idEdit->text().toInt();
-    int     num = ui->numEdit->value();
+    int    id   = ui->idEdit->text().toInt();
+    int    num  = ui->numEdit->value();
     if (book) {
         book->elem.name = name;
         book->elem.identifier = id;
@@ -154,10 +157,10 @@ void BookInfoDialog::on_deleteButton_clicked() {
                              tr("还有 ") + QString::number(book->elem.readers.size())
                              + tr(" 本书仍处于借出状态。要强制删除吗？"),
                              QMessageBox::Ok | QMessageBox::Cancel)
-                == QMessageBox::Ok) {
-            lib.del(book, true);
+                == QMessageBox::Cancel) {
+            return;
         }
-        return;
+        lib.del(book, true);
     }
     accept();
 }
