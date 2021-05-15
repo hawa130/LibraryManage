@@ -40,6 +40,14 @@ private slots:
 
     void on_addButton_clicked();
 
+    void on_aboutMeAction_triggered();
+
+    void on_signOutAction_triggered();
+
+    void on_importAction_triggered();
+
+    void on_exportAction_triggered();
+
 private:
     Ui::LibraryMain *ui;
     QStandardItemModel* userModel;

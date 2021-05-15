@@ -19,7 +19,9 @@ public:
     ~UserInfoDialog();
 
 private slots:
-    void receiveData(QString data);
+    void receiveBookData(QString data);
+
+    void receivePwdData(QString data);
 
     void on_returnButton_clicked();
 
@@ -30,6 +32,8 @@ private slots:
     void on_tableView_clicked();
 
     void on_borrowButton_clicked();
+
+    void on_pwdButton_clicked();
 
 private:
     Ui::UserInfoDialog *ui;

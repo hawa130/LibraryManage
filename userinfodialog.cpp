@@ -1,6 +1,7 @@
 #include "userinfodialog.h"
 #include "ui_userinfodialog.h"
 #include "selectdialog.h"
+#include "passworddialog.h"
 
 #include <QMessageBox>
 #include <QIntValidator>
@@ -25,15 +26,17 @@ UserInfoDialog::UserInfoDialog(QWidget *parent, int _userID) :
         ui->deleteButton->setDisabled(true);
         ui->borrowButton->setDisabled(true);
     }
-    if (!isLoginAdmin) {
+    if (!isLoginAdmin && _userID != loginUserID) {
         ui->borrowButton->setHidden(true);
         ui->returnButton->setHidden(true);
         ui->deleteButton->setHidden(true);
         ui->buttonBox->setHidden(true);
         ui->nameEdit->setDisabled(true);
-        ui->idEdit->setDisabled(true);
-        ui->adminBox->setDisabled(true);
         ui->pwdButton->setHidden(true);
+    }
+    if (!isLoginAdmin) {
+        ui->adminBox->setDisabled(true);
+        ui->idEdit->setDisabled(true);
     }
 }
 
@@ -41,13 +44,17 @@ UserInfoDialog::~UserInfoDialog() {
     delete ui;
 }
 
-void UserInfoDialog::receiveData(QString data) {
+void UserInfoDialog::receiveBookData(QString data) {
     auto book = lib.findBook(data.toInt());
     if (lib.borrowBook(user, book)) {
         QMessageBox::information(this, tr("提示"), tr("这本书已经没有剩余了。"), QMessageBox::Ok);
         return;
     }
     displayTable();
+}
+
+void UserInfoDialog::receivePwdData(QString data) {
+    user->elem.password = data.toStdString();
 }
 
 void UserInfoDialog::initBookTable() {
@@ -168,6 +175,13 @@ bool UserInfoDialog::checkUserInfo() {
 
 void UserInfoDialog::on_borrowButton_clicked() {
     SelectDialog selectDlg(this, -1, user->elem.identifier);
-    connect(&selectDlg, SIGNAL(sendData(QString)), this, SLOT(receiveData(QString)));
+    connect(&selectDlg, SIGNAL(sendData(QString)), this, SLOT(receiveBookData(QString)));
     selectDlg.exec();
 }
+
+void UserInfoDialog::on_pwdButton_clicked() {
+    PasswordDialog pwdDlg(this, user);
+    connect(&pwdDlg, SIGNAL(sendPwdData(QString)), this, SLOT(receivePwdData(QString)));
+    pwdDlg.exec();
+}
+

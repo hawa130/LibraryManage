@@ -5,6 +5,7 @@
 
 #include <QTableView>
 #include <QMessageBox>
+#include <QFileDialog>
 
 LibraryMain::LibraryMain(QWidget *parent)
     : QMainWindow(parent)
@@ -281,5 +282,34 @@ void LibraryMain::on_writeDataAction_triggered() {
     }
     ui->statusbar->showMessage(tr("成功写入文件 ") + tr(lib.bookPath)
                                + tr(", ") + tr(lib.userPath), 3000);
+}
+
+void LibraryMain::on_aboutMeAction_triggered() {
+    UserInfoDialog userDialog(this, loginUserID);
+    userDialog.exec();
+}
+
+void LibraryMain::on_signOutAction_triggered() {
+    close();
+}
+
+void LibraryMain::on_importAction_triggered() {
+    QString bookFile = QFileDialog::getOpenFileName(this,
+                tr("导入图书数据文件"), "./", tr("csv 文件 (*.csv)"));
+    QString userFile = QFileDialog::getOpenFileName(this,
+                tr("导入用户数据文件"), "./", tr("csv 文件 (*.csv)"));
+    lib.books.clear();
+    lib.users.clear();
+    lib.read(userFile.toLatin1(), bookFile.toLatin1());
+}
+
+
+void LibraryMain::on_exportAction_triggered() {
+    QString bookFile = QFileDialog::getSaveFileName(this,
+                tr("导出图书数据文件"), "./book.csv", tr("csv 文件 (*.csv)"));
+    QString userFile = QFileDialog::getSaveFileName(this,
+                tr("导出用户数据文件"), "./user.csv", tr("csv 文件 (*.csv)"));
+    lib.writeBook(bookFile.toLatin1());
+    lib.writeUser(userFile.toLatin1());
 }
 

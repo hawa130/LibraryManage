@@ -13,6 +13,7 @@ SOURCES += \
     logindialog.cpp \
     main.cpp \
     librarymain.cpp \
+    passworddialog.cpp \
     selectdialog.cpp \
     userinfodialog.cpp
 
@@ -21,6 +22,7 @@ HEADERS += \
     librarydata.h \
     librarymain.h \
     logindialog.h \
+    passworddialog.h \
     selectdialog.h \
     userinfodialog.h
 
@@ -28,6 +30,7 @@ FORMS += \
     bookinfodialog.ui \
     librarymain.ui \
     logindialog.ui \
+    passworddialog.ui \
     selectdialog.ui \
     userinfodialog.ui
 

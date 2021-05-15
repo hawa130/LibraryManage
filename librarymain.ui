@@ -250,6 +250,9 @@
   </action>
   <action name="aboutMeAction">
    <property name="text">
+    <string>我的信息...</string>
+   </property>
+   <property name="toolTip">
     <string>我的信息</string>
    </property>
    <property name="font">
