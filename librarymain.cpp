@@ -14,6 +14,18 @@ LibraryMain::LibraryMain(QWidget *parent)
     ui->pageUpButton->setHidden(true);
     ui->pageDnButton->setHidden(true);
     ui->bookSwitchButton->setDisabled(true);
+
+    bookModel = new QStandardItemModel();
+    userModel = new QStandardItemModel();
+
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    displayBookData();
+
+    if (loginUserID == -1) {
+        return;
+    }
     // 根据登录用户是否为管理员显示或隐藏按钮
     if (!lib.isAdmin(lib.findUser(loginUserID))) {
         isLoginAdmin = false;
@@ -21,13 +33,6 @@ LibraryMain::LibraryMain(QWidget *parent)
     } else {
         isLoginAdmin = true;
     }
-
-    bookModel = new QStandardItemModel();
-    userModel = new QStandardItemModel();
-
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    displayBookData();
 }
 
 LibraryMain::~LibraryMain() {
@@ -249,6 +254,12 @@ void LibraryMain::updateButton(int bookID, int userID) {
     auto book = lib.findBook(bookID);
     ui->editButton->setDisabled(false);
 
+    if (userID == -1) {
+        ui->borrowButton->setDisabled(true);
+        ui->returnButton->setDisabled(true);
+        return;
+    }
+
     if (book->elem.quantity == book->elem.readers.size()) {
         ui->borrowButton->setDisabled(true);
     } else {
@@ -265,6 +276,7 @@ void LibraryMain::updateButton(int bookID, int userID) {
 void LibraryMain::disableButton() {
     ui->borrowButton->setDisabled(true);
     ui->returnButton->setDisabled(true);
+    ui->editButton->setDisabled(true);
 }
 
 void LibraryMain::on_editButton_clicked() {
@@ -356,6 +368,7 @@ void LibraryMain::on_readDataAction_triggered() {
 
 void LibraryMain::on_aboutAction_triggered() {
     QMessageBox aboutBox;
+    aboutBox.setWindowTitle(tr("关于"));
     aboutBox.setText("hawa130的图书管理系统");
     aboutBox.setInformativeText(tr("一个易于使用的简单图书管理系统。<br><a href=\"https://github.com/hawa130/LibraryManage\">项目地址</a>"));
     aboutBox.exec();

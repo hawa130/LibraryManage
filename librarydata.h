@@ -285,6 +285,7 @@ public:
     char DIVIDE_CHAR;
 
     Library() {
+        // 获取csv文件分隔符
         short chartmp;
         GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, (LPTSTR)&chartmp, sizeof(chartmp));
         DIVIDE_CHAR = (char)chartmp;
@@ -302,9 +303,9 @@ public:
     int read(const char *userFile, const char *bookFile) {
         bookPath = bookFile;
         userPath = userFile;
-        userDataReader(userFile);
-        bookDataReader(bookFile);
-        if (users.isEmpty() || books.isEmpty()) {
+        int userState = userDataReader(userFile);
+        int bookState = bookDataReader(bookFile);
+        if (userState || bookState) {
             cerr << "未读取到数据。" << endl;
             return 1;
         }
@@ -325,7 +326,7 @@ public:
         }
         return 0;
     }
-
+    // 写入文件信息
     int writeBook(const char *bookFile) {
         ofstream output(bookFile);
         if (!output) {
@@ -557,11 +558,11 @@ public:
     }
 
 protected:
-    void bookDataReader(const char *fileName) {
+    int bookDataReader(const char *fileName) {
         ifstream input(fileName);
         if (!input) {
             cerr << "数据读取失败。请检查文件\"" << fileName << "\"是否存在。" << endl;
-            exit(1);
+            return 1;
         }
         while (!input.eof()) {
             string line;
@@ -602,13 +603,14 @@ protected:
             books.append(BookInfo(name, identifier, quantity, IDs));
         }
         input.close();
+        return 0;
     }
 
-    void userDataReader(const char *fileName) {
+    int userDataReader(const char *fileName) {
         ifstream input(fileName);
         if (!input) {
             cerr << "数据读取失败。请检查文件\"" << fileName << "\"是否存在。" << endl;
-            exit(1);
+            return 1;
         }
         while (!input.eof()) {
             string line;
@@ -653,6 +655,7 @@ protected:
             users.append(UserInfo(name, password, identifier, quantity, IDs));
         }
         input.close();
+        return 0;
     }
 
 };

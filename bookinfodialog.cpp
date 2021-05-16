@@ -28,7 +28,16 @@ BookInfoDialog::BookInfoDialog(QWidget *parent, int _bookID) :
         ui->deleteButton->setDisabled(true);
         ui->borrowButton->setDisabled(true);
         ui->returnButton->setDisabled(true);
+        ui->borrowThisButton->setDisabled(true);
+        ui->returnThisButton->setDisabled(true);
     }
+
+    if (loginUserID == -1) {
+        ui->borrowThisButton->setHidden(true);
+        ui->returnThisButton->setHidden(true);
+        return;
+    }
+
     if (!isLoginAdmin) {
         ui->borrowButton->setHidden(true);
         ui->returnButton->setHidden(true);
@@ -84,6 +93,10 @@ void BookInfoDialog::appendSingleUser(Node<UserInfo>* p) {
 
 void BookInfoDialog::disableButton() {
     ui->returnButton->setDisabled(true);
+    if (loginUserID == -1) {
+        ui->borrowButton->setDisabled(true);
+        return;
+    }
     if (lib.findUser(loginUserID)->elem.books.find(book)) {
         ui->returnThisButton->setDisabled(false);
     } else {

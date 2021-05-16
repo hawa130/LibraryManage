@@ -28,6 +28,9 @@ UserInfoDialog::UserInfoDialog(QWidget *parent, int _userID) :
     } else {
         ui->deleteButton->setDisabled(true);
         ui->borrowButton->setDisabled(true);
+        ui->returnButton->setDisabled(true);
+        ui->pwdButton->setDisabled(true);
+        ui->pwdButton->setToolTip(tr("保存用户后以修改密码"));
     }
     if (!isLoginAdmin && _userID != loginUserID) {
         ui->borrowButton->setHidden(true);
@@ -57,7 +60,12 @@ void UserInfoDialog::receiveBookData(QString data) {
 }
 
 void UserInfoDialog::receivePwdData(QString data) {
-    user->elem.password = data.toStdString();
+    if (user) {
+        user->elem.password = data.toStdString();
+    } else {
+        updateUserInfo();
+        user->elem.password = data.toStdString();
+    }
 }
 
 void UserInfoDialog::initBookTable() {

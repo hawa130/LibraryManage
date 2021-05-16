@@ -23,8 +23,14 @@ int main(int argc, char *argv[])
         }
     }
     // 图书数据读取
-    lib.read("D:\\Users\\hawa130\\Documents\\QtProj\\LibraryManage\\user.csv",
-             "D:\\Users\\hawa130\\Documents\\QtProj\\LibraryManage\\book.csv");
+    if (lib.read("user.csv",
+                 "book.csv")) {
+        loginUserID = -1;
+        isLoginAdmin = true;
+        LibraryMain w;
+        w.show();
+        return a.exec();
+    }
 
     LoginDialog login;
     if (login.exec() == QDialog::Accepted) {
@@ -32,5 +38,6 @@ int main(int argc, char *argv[])
         w.show();
         return a.exec();
     }
+
     return 0;
 }
