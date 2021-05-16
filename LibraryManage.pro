@@ -46,3 +46,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     book.ico
+
+RC_ICONS = book.ico
