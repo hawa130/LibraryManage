@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>380</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="font">
@@ -97,6 +97,24 @@
        </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="borrowThisButton">
+       <property name="text">
+        <string>借这本书</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="returnThisButton">
+       <property name="text">
+        <string>还这本书</string>
        </property>
       </widget>
      </item>

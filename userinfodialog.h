@@ -35,6 +35,8 @@ private slots:
 
     void on_pwdButton_clicked();
 
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::UserInfoDialog *ui;
     QStandardItemModel* bookModel;

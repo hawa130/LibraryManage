@@ -3,6 +3,7 @@
 
 #include "librarydata.h"
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
@@ -17,6 +18,8 @@ class LibraryMain : public QMainWindow {
 public:
     LibraryMain(QWidget *parent = nullptr);
     ~LibraryMain();
+
+    virtual void closeEvent(QCloseEvent*);
 
 private slots:
 
@@ -47,6 +50,10 @@ private slots:
     void on_importAction_triggered();
 
     void on_exportAction_triggered();
+
+    void on_readDataAction_triggered();
+
+    void on_aboutAction_triggered();
 
 private:
     Ui::LibraryMain *ui;

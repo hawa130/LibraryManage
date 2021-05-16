@@ -14,7 +14,7 @@ LibraryMain::LibraryMain(QWidget *parent)
     ui->pageUpButton->setHidden(true);
     ui->pageDnButton->setHidden(true);
     ui->bookSwitchButton->setDisabled(true);
-
+    // 根据登录用户是否为管理员显示或隐藏按钮
     if (!lib.isAdmin(lib.findUser(loginUserID))) {
         isLoginAdmin = false;
         ui->addButton->setHidden(true);
@@ -30,6 +30,27 @@ LibraryMain::LibraryMain(QWidget *parent)
 
 LibraryMain::~LibraryMain() {
     delete ui;
+}
+
+void LibraryMain::closeEvent(QCloseEvent *event) {
+    int ret = QMessageBox::question(this, tr("图书管理"), tr("确认要保存并退出吗？"),
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    switch (ret) {
+    case QMessageBox::Save:
+        if (lib.writeBook(lib.bookPath) || lib.writeUser(lib.userPath)) {
+            QMessageBox::warning(this, tr("错误"), tr("写入文件失败。"), QMessageBox::Ok);
+            return;
+        }
+        event->accept();
+        break;
+    case QMessageBox::Discard:
+        event->accept();
+        break;
+    case QMessageBox::Cancel:
+    default:
+        event->ignore();
+        break;
+    }
 }
 
 void LibraryMain::initBookTable() {
@@ -298,18 +319,40 @@ void LibraryMain::on_importAction_triggered() {
                 tr("导入图书数据文件"), "./", tr("csv 文件 (*.csv)"));
     QString userFile = QFileDialog::getOpenFileName(this,
                 tr("导入用户数据文件"), "./", tr("csv 文件 (*.csv)"));
+    if (bookFile.isEmpty() || userFile.isEmpty()) return;
     lib.books.clear();
     lib.users.clear();
     lib.read(userFile.toLatin1(), bookFile.toLatin1());
+    ui->searchButton->click();
 }
-
 
 void LibraryMain::on_exportAction_triggered() {
     QString bookFile = QFileDialog::getSaveFileName(this,
                 tr("导出图书数据文件"), "./book.csv", tr("csv 文件 (*.csv)"));
     QString userFile = QFileDialog::getSaveFileName(this,
                 tr("导出用户数据文件"), "./user.csv", tr("csv 文件 (*.csv)"));
+    if (bookFile.isEmpty() || userFile.isEmpty()) return;
     lib.writeBook(bookFile.toLatin1());
     lib.writeUser(userFile.toLatin1());
+}
+
+void LibraryMain::on_readDataAction_triggered() {
+    if (lib.bookPath[0] == '\0' || lib.userPath[0] == '\0') return;
+    ifstream input1(lib.bookPath);
+    ifstream input2(lib.userPath);
+    if (!input1 || !input2) {
+        QMessageBox::warning(this, tr("错误"), tr("读取文件失败。"), QMessageBox::Ok);
+        return;
+    }
+    lib.books.clear();
+    lib.users.clear();
+    lib.read(lib.userPath, lib.bookPath);
+    ui->statusbar->showMessage(tr("成功读取文件 ") + tr(lib.bookPath)
+                               + tr(", ") + tr(lib.userPath), 3000);
+    ui->searchButton->click();
+}
+
+void LibraryMain::on_aboutAction_triggered() {
+
 }
 

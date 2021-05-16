@@ -2,6 +2,7 @@
 #include "ui_userinfodialog.h"
 #include "selectdialog.h"
 #include "passworddialog.h"
+#include "bookinfodialog.h"
 
 #include <QMessageBox>
 #include <QIntValidator>
@@ -14,7 +15,6 @@ UserInfoDialog::UserInfoDialog(QWidget *parent, int _userID) :
     bookModel = new QStandardItemModel();
 
     ui->idEdit->setValidator(new QIntValidator(0, INT_MAX, this));
-    ui->returnButton->setDisabled(true);
 
     user = lib.findUser(_userID);
     if (user) {
@@ -58,6 +58,7 @@ void UserInfoDialog::receivePwdData(QString data) {
 }
 
 void UserInfoDialog::initBookTable() {
+    ui->returnButton->setDisabled(true);
     bookModel->clear();
     bookModel->setColumnCount(4);
     bookModel->setHeaderData(0, Qt::Horizontal, tr("名称"));
@@ -185,3 +186,9 @@ void UserInfoDialog::on_pwdButton_clicked() {
     pwdDlg.exec();
 }
 
+void UserInfoDialog::on_tableView_doubleClicked(const QModelIndex &index) {
+    int bookID = getSelection(index);
+    BookInfoDialog bookDialog(this, bookID);
+    bookDialog.exec();
+    displayTable();
+}

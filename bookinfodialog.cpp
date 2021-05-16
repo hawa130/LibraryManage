@@ -1,6 +1,7 @@
 #include "bookinfodialog.h"
 #include "ui_bookinfodialog.h"
 #include "selectdialog.h"
+#include "userinfodialog.h"
 
 #include <QMessageBox>
 #include <QIntValidator>
@@ -80,10 +81,18 @@ void BookInfoDialog::appendSingleUser(Node<UserInfo>* p) {
 
 void BookInfoDialog::disableButton() {
     ui->returnButton->setDisabled(true);
-    if (book->elem.quantity == book->elem.readers.size()) {
+    if (lib.findUser(loginUserID)->elem.books.find(book)) {
+        ui->returnThisButton->setDisabled(false);
+    } else {
+        ui->returnThisButton->setDisabled(true);
+    }
+
+    if (book->elem.quantity <= book->elem.readers.size()) {
         ui->borrowButton->setDisabled(true);
+        ui->borrowThisButton->setDisabled(true);
     } else {
         ui->borrowButton->setDisabled(false);
+        ui->borrowThisButton->setDisabled(false);
     }
 }
 
@@ -191,3 +200,23 @@ void BookInfoDialog::on_borrowButton_clicked() {
     connect(&selectDlg, SIGNAL(sendData(QString)), this, SLOT(receiveData(QString)));
     selectDlg.exec();
 }
+
+void BookInfoDialog::on_tableView_doubleClicked(const QModelIndex &index) {
+    int userID = getSelection(index);
+    UserInfoDialog userDialog(this, userID);
+    userDialog.exec();
+    displayTable();
+}
+
+void BookInfoDialog::on_borrowThisButton_clicked() {
+    auto user = lib.findUser(loginUserID);
+    lib.borrowBook(user, book);
+    displayTable();
+}
+
+void BookInfoDialog::on_returnThisButton_clicked() {
+    auto user = lib.findUser(loginUserID);
+    lib.returnBook(user, book);
+    displayTable();
+}
+

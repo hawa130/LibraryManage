@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <Windows.h>
 #include <climits>
 #include <cstdlib>
 
@@ -15,8 +16,6 @@ using std::istream;
 using std::cout;
 using std::cerr;
 using std::endl;
-
-const char DIVIDE_CHAR = '\t';
 
 class BookInfo;		// 图书信息类
 class UserInfo;		// 用户类
@@ -283,13 +282,22 @@ public:
     List<UserInfo> users;
     const char *bookPath;
     const char *userPath;
+    char DIVIDE_CHAR;
 
-    Library() {}
-    ~Library() {}
+    Library() {
+        short chartmp;
+        GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, (LPTSTR)&chartmp, sizeof(chartmp));
+        DIVIDE_CHAR = (char)chartmp;
+    }
 
     Library(const char *userFile, const char *bookFile) {
+        short chartmp;
+        GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, (LPTSTR)&chartmp, sizeof(chartmp));
+        DIVIDE_CHAR = (char)chartmp;
         read(userFile, bookFile);
     };
+
+    ~Library() {}
     // 从文件读取数据
     int read(const char *userFile, const char *bookFile) {
         bookPath = bookFile;

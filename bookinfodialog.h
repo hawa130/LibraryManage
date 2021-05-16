@@ -32,6 +32,12 @@ private slots:
 
     void on_borrowButton_clicked();
 
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_borrowThisButton_clicked();
+
+    void on_returnThisButton_clicked();
+
 private:
     Ui::BookInfoDialog *ui;
     QStandardItemModel* userModel;

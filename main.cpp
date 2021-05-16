@@ -11,6 +11,7 @@ bool isLoginAdmin;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setFont(QFont("微软雅黑", 9));
     // 语言文件读取
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
