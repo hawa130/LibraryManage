@@ -25,6 +25,8 @@ LibraryMain::LibraryMain(QWidget *parent)
     bookModel = new QStandardItemModel();
     userModel = new QStandardItemModel();
 
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     displayBookData();
 }
 
@@ -353,6 +355,9 @@ void LibraryMain::on_readDataAction_triggered() {
 }
 
 void LibraryMain::on_aboutAction_triggered() {
-
+    QMessageBox aboutBox;
+    aboutBox.setText("hawa130的图书管理系统");
+    aboutBox.setInformativeText(tr("一个易于使用的简单图书管理系统。<br><a href=\"https://github.com/hawa130/LibraryManage\">项目地址</a>"));
+    aboutBox.exec();
 }
 

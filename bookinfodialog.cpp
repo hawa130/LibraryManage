@@ -15,6 +15,9 @@ BookInfoDialog::BookInfoDialog(QWidget *parent, int _bookID) :
 
     ui->idEdit->setValidator(new QIntValidator(0, INT_MAX, this));
 
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
     book = lib.findBook(_bookID);
     if (book) {
         displayTable();

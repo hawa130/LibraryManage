@@ -13,6 +13,9 @@ SelectDialog::SelectDialog(QWidget *parent, int _bookID, int _userID) :
     bookModel = new QStandardItemModel();
     userModel = new QStandardItemModel();
 
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
     if (_bookID != -1) {
         ui->lineEdit->setPlaceholderText(tr("用户编号..."));
         this->setWindowTitle(tr("选择用户"));

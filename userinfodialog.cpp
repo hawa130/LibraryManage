@@ -16,6 +16,9 @@ UserInfoDialog::UserInfoDialog(QWidget *parent, int _userID) :
 
     ui->idEdit->setValidator(new QIntValidator(0, INT_MAX, this));
 
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
     user = lib.findUser(_userID);
     if (user) {
         displayTable();
