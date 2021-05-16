@@ -93,15 +93,6 @@ void BookInfoDialog::appendSingleUser(Node<UserInfo>* p) {
 
 void BookInfoDialog::disableButton() {
     ui->returnButton->setDisabled(true);
-    if (loginUserID == -1) {
-        ui->borrowButton->setDisabled(true);
-        return;
-    }
-    if (lib.findUser(loginUserID)->elem.books.find(book)) {
-        ui->returnThisButton->setDisabled(false);
-    } else {
-        ui->returnThisButton->setDisabled(true);
-    }
 
     if (book->elem.quantity <= book->elem.readers.size()) {
         ui->borrowButton->setDisabled(true);
@@ -109,6 +100,15 @@ void BookInfoDialog::disableButton() {
     } else {
         ui->borrowButton->setDisabled(false);
         ui->borrowThisButton->setDisabled(false);
+    }
+
+    if (loginUserID == -1) {
+        return;
+    }
+    if (lib.findUser(loginUserID)->elem.books.find(book)) {
+        ui->returnThisButton->setDisabled(false);
+    } else {
+        ui->returnThisButton->setDisabled(true);
     }
 }
 
